@@ -15,9 +15,8 @@ public class Main extends JPanel implements Runnable {
 	}
 	
 	public void paint(Graphics g) {
-		setBackground(new Color(255, 255, 255));
-		g.clearRect(0, 0, getWidth(), getHeight());
-		g.drawString("Hello", 0, 0);
+		g.setColor(new Color(0, 0, 0));
+		g.fillRect(0, 0, getWidth(), getHeight());
 	}
 	
 	public void run() {
