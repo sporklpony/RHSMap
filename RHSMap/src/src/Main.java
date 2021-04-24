@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+<<<<<<< HEAD
 public class Main extends JPanel implements Runnable, MouseMotionListener, MouseListener {
 	int viewX = 0;
 	int viewY = 0;
@@ -28,15 +29,28 @@ public class Main extends JPanel implements Runnable, MouseMotionListener, Mouse
 			e.printStackTrace();
 		}
 		setVisible(true);
+=======
+import src.ZoomButton;
+
+public class Main extends JPanel implements Runnable {
+	
+	public Main() {
+>>>>>>> write ZoomButton class
 		setFocusable(true);
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		new Thread(this).start();
+		setVisible(true);
 	}
 	
 	public void paint(Graphics g) {
+<<<<<<< HEAD
 		super.paint(g);
 		g.drawImage(map, 0, 0, getWidth(), getHeight(), viewX, viewY, viewX + getWidth(), viewY + getHeight(), this);
+=======
+		g.setColor(new Color(255, 255, 255));
+		g.fillRect(0, 0, getWidth(), getHeight());
+>>>>>>> write ZoomButton class
 	}
 	
 	public void run() {
