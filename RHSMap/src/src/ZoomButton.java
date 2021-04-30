@@ -1,6 +1,7 @@
 package src;
 
 import java.awt.image.BufferedImage;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +36,7 @@ public class ZoomButton extends JButton {
 
     @Override
     public void paint(Graphics g) {
-        g.drawImage(icon, getX(), getY(), getWidth(), getHeight(), null);
+        int size = Math.min(getWidth(), getHeight());
+        g.drawImage(icon, 0, 0, size, size, this);
     }
 }
