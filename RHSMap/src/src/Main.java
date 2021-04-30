@@ -21,6 +21,7 @@ public class Main extends JPanel implements Runnable, MouseMotionListener, Mouse
 	int viewY = 0;
 	int prevX = 0;
 	int prevY = 0;
+	double zoom = 1;
 	BufferedImage map;
 
 	public Main() {
@@ -40,21 +41,21 @@ public class Main extends JPanel implements Runnable, MouseMotionListener, Mouse
 	
 	public void paint(Graphics g) {
 		super.paint(g);
-		g.drawImage(map, 0, 0, getWidth(), getHeight(), viewX, viewY, viewX + getWidth(), viewY + getHeight(), this);
+		g.drawImage(map, 0, 0, getWidth(), getHeight(), viewX, viewY, viewX + (int)(zoom * (getWidth() < getHeight() ? 500 : 500.0 / getHeight() * getWidth())), viewY + (int)(zoom * (getWidth() < getHeight() ?  500.0 / getWidth() * getHeight() : 500)), this);
 	}
 	
 	public void run() {
 		long a = System.currentTimeMillis();
 		while(true) {
-			if(viewX < 0) viewX++;
-			else if(viewX > map.getWidth() - getWidth()) viewX--;
-			if(viewY < 0) viewY++;
-			else if(viewY > map.getHeight() - getHeight()) viewY--;
+			if(viewX < 0) viewX += Math.ceil(-viewX/10.0);
+			else if(viewX > map.getWidth() - getWidth()) viewX -= Math.ceil((viewX - map.getWidth() + getWidth())/10.0);
+			if(viewY < 0) viewY += Math.ceil(-viewY/10.0);
+			else if(viewY > map.getHeight() - getHeight()) viewY -= Math.ceil((viewY - map.getHeight() + getHeight())/10.0);
 			
 			repaint();
 			
-			if(a < 30) try {
-				Thread.sleep(30 - a);
+			if(System.currentTimeMillis() - a < 30) try {
+				Thread.sleep(30 - System.currentTimeMillis() + a);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
