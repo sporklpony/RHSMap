@@ -5,8 +5,12 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -15,9 +19,14 @@ public class Main extends JPanel implements Runnable, MouseMotionListener, Mouse
 	int viewY = 0;
 	int prevX = 0;
 	int prevY = 0;
-	ImageIcon map = new ImageIcon(getClass().getResource("/resources/map.png"));
+	BufferedImage map;
 	
 	public Main() {
+		try {
+			map = ImageIO.read(new File("src/resources/map.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		setVisible(true);
 		setFocusable(true);
 		addMouseListener(this);
@@ -27,16 +36,16 @@ public class Main extends JPanel implements Runnable, MouseMotionListener, Mouse
 	
 	public void paint(Graphics g) {
 		super.paint(g);
-		g.drawImage(map.getImage(), 0, 0, getWidth(), getHeight(), viewX, viewY, viewX + getWidth(), viewY + getHeight(), this);
+		g.drawImage(map, 0, 0, getWidth(), getHeight(), viewX, viewY, viewX + getWidth(), viewY + getHeight(), this);
 	}
 	
 	public void run() {
 		long a = System.currentTimeMillis();
 		while(true) {
 			if(viewX < 0) viewX++;
-			else if(viewX > map.getIconWidth() - getWidth()) viewX--;
+			else if(viewX > map.getWidth() - getWidth()) viewX--;
 			if(viewY < 0) viewY++;
-			else if(viewY > map.getIconHeight() - getHeight()) viewY--;
+			else if(viewY > map.getHeight() - getHeight()) viewY--;
 			
 			repaint();
 			
