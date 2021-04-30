@@ -7,6 +7,7 @@ public class Window extends JFrame {
 		add(new Main());
 		setVisible(true);
 		setSize(500, 500);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
 	public static void main(String[] args) {
