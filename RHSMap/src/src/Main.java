@@ -14,13 +14,15 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import src.ZoomButton;
+
 public class Main extends JPanel implements Runnable, MouseMotionListener, MouseListener {
 	int viewX = 0;
 	int viewY = 0;
 	int prevX = 0;
 	int prevY = 0;
 	BufferedImage map;
-	
+
 	public Main() {
 		try {
 			map = ImageIO.read(new File("src/resources/map.png"));
@@ -31,7 +33,9 @@ public class Main extends JPanel implements Runnable, MouseMotionListener, Mouse
 		setFocusable(true);
 		addMouseListener(this);
 		addMouseMotionListener(this);
+
 		new Thread(this).start();
+		setVisible(true);
 	}
 	
 	public void paint(Graphics g) {
