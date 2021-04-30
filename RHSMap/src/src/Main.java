@@ -15,11 +15,16 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class Main extends JPanel implements Runnable, MouseMotionListener, MouseListener {
-	int viewX = 0;
-	int viewY = 0;
+	double viewX = 0;
+	double viewY = 0;
+	double viewWidth = 0;
+	double viewHeight = 0;
 	int prevX = 0;
 	int prevY = 0;
+	double momentumX = 0;
+	double momentumY = 0;
 	double zoom = 1;
+	boolean mouseDown = false;
 	BufferedImage map;
 	
 	public Main() {
@@ -37,17 +42,30 @@ public class Main extends JPanel implements Runnable, MouseMotionListener, Mouse
 	
 	public void paint(Graphics g) {
 		super.paint(g);
-		g.drawImage(map, 0, 0, getWidth(), getHeight(), viewX, viewY, viewX + (int)(zoom * (getWidth() < getHeight() ? 500 : 500.0 / getHeight() * getWidth())), viewY + (int)(zoom * (getWidth() < getHeight() ?  500.0 / getWidth() * getHeight() : 500)), this);
+		g.drawImage(map, 0, 0, getWidth(), getHeight(), (int)Math.round(viewX), (int)Math.round(viewY), (int)Math.round(viewX + viewWidth), (int)Math.round(viewY + viewHeight), this);
 	}
+	
+	public void update() {	
+		viewWidth = zoom * (getWidth() < getHeight() ? 500.0 : 500.0 / getHeight() * getWidth());
+		viewHeight = zoom * (getWidth() < getHeight() ?  500.0 / getWidth() * getHeight() : 500.0);
+		
+		if(viewX < 0) viewX -= viewX/10.0;
+		else if(viewX > map.getWidth() - viewWidth) viewX -= (viewX - map.getWidth() + viewWidth)/10.0;
+		if(viewY < 0) viewY -= viewY/10.0;
+		else if(viewY > map.getHeight() - viewHeight) viewY -= (viewY - map.getHeight() + viewHeight)/10.0;
+		
+		momentumX *= 0.9;
+		momentumY *= 0.9;
+		if(!mouseDown) {
+			viewX -= momentumX;
+			viewY -= momentumY;
+		}
+	} 
 	
 	public void run() {
 		long a = System.currentTimeMillis();
 		while(true) {
-			if(viewX < 0) viewX += Math.ceil(-viewX/10.0);
-			else if(viewX > map.getWidth() - getWidth()) viewX -= Math.ceil((viewX - map.getWidth() + getWidth())/10.0);
-			if(viewY < 0) viewY += Math.ceil(-viewY/10.0);
-			else if(viewY > map.getHeight() - getHeight()) viewY -= Math.ceil((viewY - map.getHeight() + getHeight())/10.0);
-			
+			update();
 			repaint();
 			
 			if(System.currentTimeMillis() - a < 30) try {
@@ -63,6 +81,8 @@ public class Main extends JPanel implements Runnable, MouseMotionListener, Mouse
 	public void mouseDragged(MouseEvent e) {
 		viewX -= e.getX() - prevX;
 		viewY -= e.getY() - prevY;
+		momentumX += 0.1 * (e.getX() - prevX);
+		momentumY += 0.1 * (e.getY() - prevY);
 		prevX = e.getX();
 		prevY = e.getY();
 	}
@@ -82,12 +102,12 @@ public class Main extends JPanel implements Runnable, MouseMotionListener, Mouse
 	public void mousePressed(MouseEvent e) {
 		prevX = e.getX();
 		prevY = e.getY();
+		mouseDown = true;
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		mouseDown = false;
 	}
 
 	@Override
