@@ -1,20 +1,24 @@
 package src;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JPanel;
-
-import src.ZoomButton;
 
 public class Main extends JPanel implements Runnable, MouseMotionListener, MouseListener {
 	double viewX = 0;
@@ -26,8 +30,10 @@ public class Main extends JPanel implements Runnable, MouseMotionListener, Mouse
 	double momentumX = 0;
 	double momentumY = 0;
 	double zoom = 1;
+	double zoomMomentum = 0;
 	boolean mouseDown = false;
 	BufferedImage map;
+	ArrayList<ZoomButton> buttons = new ArrayList<>();
 
 	public Main() {
 		try {
@@ -42,11 +48,27 @@ public class Main extends JPanel implements Runnable, MouseMotionListener, Mouse
 
 		new Thread(this).start();
 		setVisible(true);
+		
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		add(Box.createVerticalGlue());
+		ZoomButton b = new ZoomButton(true);
+		b.addActionListener(e -> {
+			zoomMomentum = -0.05;
+		});
+		b.setAlignmentX(Component.LEFT_ALIGNMENT);
+		add(b);
+		b = new ZoomButton(false);
+		b.addActionListener(e -> {
+			zoomMomentum = 0.05;
+		});
+		b.setAlignmentX(Component.LEFT_ALIGNMENT);
+		add(b);
 	}
 	
-	public void paint(Graphics g) {
-		super.paint(g);
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		g.drawImage(map, 0, 0, getWidth(), getHeight(), (int)Math.round(viewX), (int)Math.round(viewY), (int)Math.round(viewX + viewWidth), (int)Math.round(viewY + viewHeight), this);
+		buttons.forEach(b -> b.paint(g));
 	}
 	
 	public void update() {	
@@ -64,6 +86,8 @@ public class Main extends JPanel implements Runnable, MouseMotionListener, Mouse
 			viewX -= momentumX;
 			viewY -= momentumY;
 		}
+
+		zoom += zoomMomentum *= 0.9;
 	} 
 	
 	public void run() {
