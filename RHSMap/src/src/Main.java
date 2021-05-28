@@ -20,12 +20,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-<<<<<<< HEAD
-=======
 import src.FloorRadioButton;
 import src.ZoomButton;
 
->>>>>>> c403bd6 (Add Floor Radio Buttons)
 public class Main extends JPanel implements Runnable, MouseMotionListener, MouseListener {
 	double viewX = 0;
 	double viewY = 0;
@@ -53,7 +50,6 @@ public class Main extends JPanel implements Runnable, MouseMotionListener, Mouse
 		addMouseMotionListener(this);
 
 		new Thread(this).start();
-<<<<<<< HEAD
 		setVisible(true);
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -70,9 +66,6 @@ public class Main extends JPanel implements Runnable, MouseMotionListener, Mouse
 		});
 		b.setAlignmentX(Component.LEFT_ALIGNMENT);
 		add(b);
-=======
-
->>>>>>> c403bd6 (Add Floor Radio Buttons)
 	}
 	
 	public void paintComponent(Graphics g) {
