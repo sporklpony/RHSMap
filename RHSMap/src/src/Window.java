@@ -1,11 +1,16 @@
 package src;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 public class Window extends JFrame {
 	public Window() {
-		setSize(500, 500);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setSize(screenSize.width, screenSize.height);
 		add(new Main());
+		setExtendedState(6);
+		setUndecorated(true);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
